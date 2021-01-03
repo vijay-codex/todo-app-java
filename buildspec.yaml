@@ -5,8 +5,11 @@ phases:
     commands:
       # Build the project
       - mvn package
-      # Create and upload a deployment package
-      - aws cloudformation package --template-file sam-template.yaml --s3-bucket $S3_BUCKET --output-template-file sam-template-output.yaml
+      # Package SAM template
+      - sam package --template-file sam-template.yaml --s3-bucket todo-app-java-build --output-template-file sam-template-output.yaml
+      
+      # Deploy packaged SAM template
+      - sam deploy --region us-east-2 --template-file sam-template-output.yaml --stack-name todo-app --capabilities CAPABILITY_IAM
 
 cache:
   paths:
